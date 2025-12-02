@@ -1,0 +1,24 @@
+{
+  "name": "nuxt",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "sync-types": "cp ../backend/src/payload-types.ts ./types/payload-types.ts"
+  },
+  "dependencies": {
+    "@payloadcms/live-preview": "^3.65.0",
+    "@payloadcms/live-preview-vue": "^3.65.0",
+    "nuxt": "^4.2.1",
+    "vue": "^3.5.25",
+    "vue-router": "^4.6.3"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "typescript": "^5.9.3"
+  }
+}
