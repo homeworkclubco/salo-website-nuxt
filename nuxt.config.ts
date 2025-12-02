@@ -5,6 +5,18 @@ export default defineNuxtConfig({
   devServer: {
     port: 3001,
   },
+
+  // Static generation configuration for Cloudflare deployment
+  nitro: {
+    preset: 'cloudflare-pages',
+    static: true,
+    prerender: {
+      crawlLinks: true,
+      routes: ['/'],
+      ignore: ['/preview']
+    }
+  },
+
   build: {
     transpile: ["@payloadcms/live-preview"],
   },

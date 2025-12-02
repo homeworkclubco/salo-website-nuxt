@@ -8,7 +8,9 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "sync-types": "cp ../backend/src/payload-types.ts ./types/payload-types.ts"
+    "sync-types": "cp ../backend/src/payload-types.ts ./types/payload-types.ts",
+    "deploy": "pnpm run generate && wrangler deploy",
+    "preview:cloudflare": "wrangler dev --assets dist"
   },
   "dependencies": {
     "@payloadcms/live-preview": "^3.65.0",
@@ -19,6 +21,7 @@
   },
   "devDependencies": {
     "@types/node": "^24.10.1",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "wrangler": "~4.46.0"
   }
 }
