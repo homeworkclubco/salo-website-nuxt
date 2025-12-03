@@ -6,15 +6,33 @@ export default defineNuxtConfig({
     port: 3001,
   },
 
-  // Static generation configuration for Cloudflare deployment
+  // Server-side rendering configuration for Cloudflare Workers
   nitro: {
-    preset: 'cloudflare-pages',
-    static: true,
+    preset: "cloudflare-module",
+    // Hybrid rendering: static generation for most pages, dynamic for preview
     prerender: {
       crawlLinks: true,
-      routes: ['/'],
-      ignore: ['/preview']
-    }
+      routes: [
+        // Pre-render homepage and all static pages
+        "/",
+        // Preview routes remain dynamic (not listed here)
+      ],
+    },
+  },
+
+  hooks: {
+    "nitro:build:public-assets": (nitro) => {
+      // Remove _redirects file as we use wrangler's not_found_handling instead
+      const fs = require("fs");
+      const path = require("path");
+      const redirectsPath = path.join(
+        nitro.options.output.publicDir,
+        "_redirects"
+      );
+      if (fs.existsSync(redirectsPath)) {
+        fs.unlinkSync(redirectsPath);
+      }
+    },
   },
 
   build: {
@@ -30,6 +48,9 @@ export default defineNuxtConfig({
     },
   },
   routeRules: {
+    // Static pages - pre-render at build time
+    "/": { prerender: true },
+    // Preview routes - dynamic for live preview functionality
     "/preview/**": {
       headers: {
         // Allow Payload CMS to embed preview pages in iframe
@@ -40,6 +61,8 @@ export default defineNuxtConfig({
           process.env.NUXT_PUBLIC_PAYLOAD_URL || "http://localhost:3000"
         }`,
       },
+      // Keep preview routes dynamic (no prerender)
+      prerender: false,
     },
   },
 });

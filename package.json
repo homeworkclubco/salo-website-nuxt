@@ -9,8 +9,8 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "sync-types": "cp ../backend/src/payload-types.ts ./types/payload-types.ts",
-    "deploy": "pnpm run generate && wrangler deploy",
-    "preview:cloudflare": "wrangler dev --assets dist"
+    "deploy": "NUXT_PUBLIC_PAYLOAD_URL=https://salo-website.homework-club.workers.dev pnpm run build && wrangler deploy --config wrangler.jsonc",
+    "preview:cloudflare": "wrangler dev"
   },
   "dependencies": {
     "@payloadcms/live-preview": "^3.65.0",

@@ -1,75 +1,76 @@
-# Nuxt Minimal Starter
+# Salo Website - Nuxt Frontend
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+A Nuxt.js frontend that integrates with Payload CMS backend, deployed on Cloudflare Pages with hybrid static/dynamic rendering.
+
+## Features
+
+- **Static Generation**: Most pages are pre-rendered at build time for optimal performance
+- **Dynamic Preview Routes**: `/preview/*` routes remain dynamic for Payload CMS live preview
+- **Payload CMS Integration**: Fetches content from deployed backend API
+- **Cloudflare Pages Deployment**: Optimized for Cloudflare's edge network
 
 ## Setup
 
 Make sure to install dependencies:
 
 ```bash
+# pnpm (recommended)
+pnpm install
+
 # npm
 npm install
 
-# pnpm
-pnpm install
-
 # yarn
 yarn install
-
-# bun
-bun install
 ```
 
-## Development Server
+## Environment Variables
 
-Start the development server on `http://localhost:3000`:
+Copy `.env.example` to `.env` and configure:
 
 ```bash
-# npm
-npm run dev
+cp .env.example .env
+```
 
-# pnpm
+Required variables:
+- `NUXT_PUBLIC_PAYLOAD_URL`: Your Payload CMS backend URL
+  - Development: `http://localhost:3000`
+  - Production: `https://your-backend-url.com`
+- `NUXT_API_KEY`: API key matching your backend configuration
+
+## Development
+
+Start the development server on `http://localhost:3001`:
+
+```bash
 pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
 ```
 
-## Production
+## Production Build
 
-Build the application for production:
+Build and deploy to Cloudflare Workers:
 
 ```bash
-# npm
-npm run build
-
-# pnpm
+# Build the application
 pnpm build
 
-# yarn
-yarn build
-
-# bun
-bun run build
+# Deploy to Cloudflare Workers
+pnpm deploy
 ```
 
-Locally preview production build:
-
+For local testing:
 ```bash
-# npm
-npm run preview
-
-# pnpm
 pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+## Deployment Configuration
+
+1. Update `wrangler.toml` with your actual backend URL
+2. Set environment variables in Cloudflare Pages dashboard
+3. Deploy using the deploy script
+
+## Architecture
+
+- **Static Pages**: Homepage and content pages are pre-rendered
+- **Dynamic Preview**: `/preview/pages/[id]` routes stay dynamic for live preview
+- **API Integration**: Uses `usePayloadAPI` composable for backend communication

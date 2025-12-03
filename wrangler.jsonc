@@ -1,6 +1,11 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "salo-website-nuxt",
+  "main": ".output/server/index.mjs",
+  "assets": {
+    "directory": ".output/public",
+    "binding": "ASSETS"
+  },
   "compatibility_date": "2025-07-15",
   "compatibility_flags": [
     "nodejs_compat"
@@ -14,11 +19,8 @@
       "invocation_logs": false
     }
   },
-  "assets": {
-    "directory": "dist",
-    "not_found_handling": "single-page-application"
-  },
   "vars": {
-    "NUXT_PUBLIC_PAYLOAD_URL": "https://salo-website.workers.dev"
+    "NUXT_PUBLIC_PAYLOAD_URL": "https://salo-website.homework-club.workers.dev"
+    // NUXT_API_KEY is set via `wrangler secret put NUXT_API_KEY`
   }
 }

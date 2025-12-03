@@ -118,10 +118,41 @@ export async function getPageBySlug(slug: string): Promise<Page | null> {
   }
 }
 
-export async function getPageById(id: string): Promise<Page | null> {
+export async function getPageById(
+  id: string,
+  draft: boolean = false,
+  event?: any
+): Promise<Page | null> {
   try {
     const PAYLOAD_URL = getPayloadURL();
-    const response = await fetch(`${PAYLOAD_URL}/api/pages/${id}?depth=2`);
+    const draftParam = draft ? "&draft=true" : "";
+
+    const headers: HeadersInit = {
+      "Content-Type": "application/json",
+    };
+
+    // Forward authentication cookies for draft requests
+    if (draft) {
+      if (event) {
+        // Server-side: get cookies from the request event
+        const cookieHeader =
+          event.node.req.headers.cookie || event.headers.get("cookie");
+        if (cookieHeader) {
+          headers["Cookie"] = cookieHeader;
+        }
+      } else if (typeof window !== "undefined") {
+        // Client-side: get cookies from document
+        headers["Cookie"] = document.cookie || "";
+      }
+    }
+
+    const response = await fetch(
+      `${PAYLOAD_URL}/api/pages/${id}?depth=2${draftParam}`,
+      {
+        headers,
+      }
+    );
+
     if (!response.ok) {
       throw new Error(`Failed to fetch page: ${response.statusText}`);
     }
