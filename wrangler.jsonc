@@ -1,24 +1,9 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "salo-website-nuxt",
-  "main": ".output/server/index.mjs",
-  "assets": {
-    "directory": ".output/public",
-    "binding": "ASSETS"
-  },
+  "pages_build_output_dir": ".output/public",
   "compatibility_date": "2025-07-15",
-  "compatibility_flags": [
-    "nodejs_compat"
-  ],
-  "observability": {
-    "enabled": false,
-    "logs": {
-      "enabled": true,
-      "head_sampling_rate": 1,
-      "persist": true,
-      "invocation_logs": false
-    }
-  },
+  "compatibility_flags": ["nodejs_compat"],
   "vars": {
     "NUXT_PUBLIC_PAYLOAD_URL": "https://salo-website.homework-club.workers.dev"
   }

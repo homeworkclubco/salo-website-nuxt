@@ -6,9 +6,9 @@ export default defineNuxtConfig({
     port: 3001,
   },
 
-  // Server-side rendering configuration for Cloudflare Workers
+  // Server-side rendering configuration for Cloudflare Pages
   nitro: {
-    preset: "cloudflare-module",
+    preset: "cloudflare-pages",
     // Hybrid rendering: static generation for most pages, dynamic for preview
     prerender: {
       crawlLinks: true,
