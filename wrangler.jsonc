@@ -1,7 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "salo-frontend",
-  "pages_build_output_dir": ".output/public",
+  "pages_build_output_dir": ".output/dist",
   "compatibility_date": "2025-07-15",
   "compatibility_flags": ["nodejs_compat"],
   "vars": {
