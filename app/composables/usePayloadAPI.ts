@@ -166,27 +166,79 @@ export async function getPageById(
 }
 
 export async function getHomepage(): Promise<Page | null> {
-  console.log("Fetching homepage...");
+  const PAYLOAD_URL = getPayloadURL();
+  console.log("Fetching homepage from:", PAYLOAD_URL);
+
   try {
-    const PAYLOAD_URL = getPayloadURL();
     const settingsResponse = await fetch(
       `${PAYLOAD_URL}/api/globals/site-settings?depth=2`
     );
+
+    console.log("Site settings response status:", settingsResponse.status);
+
     if (!settingsResponse.ok) {
+      const errorText = await settingsResponse.text();
+      console.error("Failed to fetch site settings:", {
+        status: settingsResponse.status,
+        statusText: settingsResponse.statusText,
+        body: errorText
+      });
       throw new Error(
-        `Failed to fetch site settings: ${settingsResponse.statusText}`
+        `Failed to fetch site settings: ${settingsResponse.status} ${settingsResponse.statusText}`
       );
     }
+
     const settings: SiteSettings = await settingsResponse.json();
+    console.log("Site settings fetched successfully:", {
+      hasHomepage: !!settings.general?.homepage,
+      homepageType: typeof settings.general?.homepage
+    });
 
     const homepage = settings.general?.homepage;
-    if (homepage && typeof homepage !== "string") {
+
+    // If homepage is not set in settings, fall back to finding a page with isHomepage flag
+    if (!homepage) {
+      console.warn("No homepage set in site settings, falling back to isHomepage flag");
+      const pagesResponse = await fetch(
+        `${PAYLOAD_URL}/api/pages?where[isHomepage][equals]=true&depth=2&limit=1`
+      );
+
+      if (pagesResponse.ok) {
+        const pagesData = await pagesResponse.json();
+        if (pagesData.docs && pagesData.docs.length > 0) {
+          console.log("Found homepage via isHomepage flag");
+          return pagesData.docs[0];
+        }
+      }
+
+      console.error("No homepage found in site settings or via isHomepage flag");
+      return null;
+    }
+
+    if (typeof homepage !== "string") {
+      console.log("Homepage found (populated)");
       return homepage;
     }
 
+    // If homepage is just an ID string, fetch it
+    console.log("Homepage is an ID, fetching full page data:", homepage);
+    const pageResponse = await fetch(
+      `${PAYLOAD_URL}/api/pages/${homepage}?depth=2`
+    );
+
+    if (pageResponse.ok) {
+      const pageData = await pageResponse.json();
+      return pageData;
+    }
+
+    console.error("Failed to fetch homepage by ID");
     return null;
   } catch (error) {
     console.error("Error fetching homepage:", error);
+    // During build, log more details
+    if (typeof process !== 'undefined' && process.env.NODE_ENV !== 'production') {
+      console.error("Full error details:", error);
+    }
     return null;
   }
 }

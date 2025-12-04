@@ -6,14 +6,30 @@ import RichTextBlock from '~/components/blocks/RichTextBlock.vue'
 // Fetch homepage data
 const page = await getHomepage()
 
+// During build, if homepage is not available, provide a fallback
+// This prevents build failures while allowing proper 404 handling in production
 if (!page) {
-  throw createError({
-    statusCode: 404,
-    message: 'Homepage not found',
-  })
+  // Log the issue for debugging
+  console.error('Homepage not found - check that:')
+  console.error('1. NUXT_PUBLIC_PAYLOAD_URL is set correctly')
+  console.error('2. PayloadCMS backend is accessible')
+  console.error('3. A homepage is configured in Site Settings or a page has isHomepage=true')
+
+  // In production, throw 404
+  // During build/dev, show error message instead of crashing
+  if (process.server && process.env.NODE_ENV === 'production') {
+    throw createError({
+      statusCode: 404,
+      message: 'Homepage not found. Please configure a homepage in Site Settings.',
+    })
+  }
 }
 
-const { title, content, meta } = page
+const { title, content, meta } = page || {
+  title: 'Homepage',
+  content: [],
+  meta: { title: 'Loading...', description: '' }
+}
 
 useHead({
   title: meta?.title || title,
