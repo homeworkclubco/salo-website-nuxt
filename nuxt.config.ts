@@ -39,8 +39,6 @@ export default defineNuxtConfig({
     transpile: ["@payloadcms/live-preview"],
   },
   runtimeConfig: {
-    // Private keys (server-only, not exposed to client)
-    apiKey: process.env.NUXT_API_KEY || "",
     // Public keys (exposed to client)
     public: {
       payloadUrl:

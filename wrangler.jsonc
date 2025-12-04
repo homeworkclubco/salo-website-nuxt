@@ -21,6 +21,5 @@
   },
   "vars": {
     "NUXT_PUBLIC_PAYLOAD_URL": "https://salo-website.homework-club.workers.dev"
-    // NUXT_API_KEY is set via `wrangler secret put NUXT_API_KEY`
   }
 }

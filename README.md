@@ -36,7 +36,6 @@ Required variables:
 - `NUXT_PUBLIC_PAYLOAD_URL`: Your Payload CMS backend URL
   - Development: `http://localhost:3000`
   - Production: `https://your-backend-url.com`
-- `NUXT_API_KEY`: API key matching your backend configuration
 
 ## Development
 

@@ -142,7 +142,8 @@ export async function getPageById(
         }
       } else if (typeof window !== "undefined") {
         // Client-side: get cookies from document
-        headers["Cookie"] = document.cookie || "";
+        const cookies = document.cookie || "";
+        headers["Cookie"] = cookies;
       }
     }
 
