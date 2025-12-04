@@ -166,6 +166,7 @@ export async function getPageById(
 }
 
 export async function getHomepage(): Promise<Page | null> {
+  console.log("Fetching homepage...");
   try {
     const PAYLOAD_URL = getPayloadURL();
     const settingsResponse = await fetch(
